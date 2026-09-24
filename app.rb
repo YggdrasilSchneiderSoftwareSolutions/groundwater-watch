@@ -19,7 +19,18 @@ configure do
   set :expose_headers, ['Content-Type']
 end
 
+# Initiale Abfrage beim Start der Anwendung
 scheduler.in '2s' do
+  check_groundwater_level
+end
+
+# Job 1: Um 08:30 Uhr morgens
+scheduler.cron '30 8 * * *' do
+  check_groundwater_level
+end
+
+# Job 2: Um 23:00 Uhr abends
+scheduler.cron '0 23 * * *' do
   check_groundwater_level
 end
 
@@ -31,7 +42,7 @@ def check_groundwater_level
     first_row = doc.css('tbody tr').at(0)
     return if first_row.nil?
 
-    gw_value = first_row.css('td')[2].text.strip
+    gw_value = first_row.css('td')[2].text.strip.gsub(',', '.').to_f
     gw_timestamp = first_row.css('td')[0].text.strip
 
     $latest_data[:groundwater_level] = gw_value
@@ -45,7 +56,8 @@ def check_groundwater_level
 end
 
 get '/' do
-  "Hello, world!"
+  @daten = $latest_data
+  erb :index
 end
 
 get '/api' do
