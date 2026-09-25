@@ -55,8 +55,8 @@ scheduler.cron '30 8 * * *' do
   check_groundwater_level
 end
 
-# Job 2: Um 23:00 Uhr abends
-scheduler.cron '0 23 * * *' do
+# Job 2: Um 20:30 Uhr abends
+scheduler.cron '30 20 * * *' do
   check_groundwater_level
 end
 
