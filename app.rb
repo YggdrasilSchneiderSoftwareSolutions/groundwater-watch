@@ -50,13 +50,8 @@ scheduler.in '2s' do
   send_email_notification(subject, body)
 end
 
-# Job 1: Um 08:30 Uhr morgens
-scheduler.cron '30 8 * * *' do
-  check_groundwater_level
-end
-
-# Job 2: Um 20:30 Uhr abends
-scheduler.cron '30 20 * * *' do
+# Job: jede Stunde die Daten holen
+scheduler.every '1h' do
   check_groundwater_level
 end
 
