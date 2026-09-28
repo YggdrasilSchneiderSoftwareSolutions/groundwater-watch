@@ -30,6 +30,8 @@
             <strong>Systemstatus:</strong> <%= @daten[:status] %>
         </div>
     </div>
-
+    <div class="status">
+        <strong>Letzter Abruf:</strong> <%= @daten[:fetch_time] || "Noch kein Abruf erfolgt" %>
+    </div>
 </body>
 </html>

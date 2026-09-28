@@ -8,7 +8,7 @@ require_relative 'secrets'
 
 register Sinatra::CrossOrigin
 
-$latest_data = { groundwater_level: nil, timestamp: nil, status: "Keine Daten vorhanden" }
+$latest_data = { groundwater_level: nil, timestamp: nil, status: "Keine Daten vorhanden", fetch_time: nil }
 
 scheduler = Rufus::Scheduler.new
 
@@ -69,6 +69,7 @@ def check_groundwater_level
     $latest_data[:groundwater_level] = gw_value
     $latest_data[:timestamp] = gw_timestamp
     $latest_data[:status] = "Daten erfolgreich aktualisiert"
+    $latest_data[:fetch_time] = Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
     # Grundwasserstand prüfen
     # 1. Element in $alert_levels finden, bei dem alert = false ist
@@ -99,6 +100,7 @@ def check_groundwater_level
   rescue => e
     puts "Fehler beim Parsen: #{e.message}"
     $latest_data[:status] = "Fehler beim Parsen: #{e.message}"
+    $latest_data[:fetch_time] = Time.now.strftime("%Y-%m-%d %H:%M:%S")
   end 
 end
 
